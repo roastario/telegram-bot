@@ -26,6 +26,7 @@ return {
     description = "search image with Google API and sends it",
     usage = "!BD [text]",
     patterns = {"^!BD (.*)$"},
-    run = run
+    run = run,
+    lex = appendSender
 }
 
