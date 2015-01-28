@@ -179,10 +179,9 @@ function load_plugins()
         print("Loading plugin", v)
         t = loadfile("plugins/" .. v .. '.lua')()
 
-        if (t.name ~= nil) then
+        if (t ~= nil)
+        then
             table.insert(plugins, t)
-        else
-            print("Did not load plugin: " .. v .. " as it has no name definition")
         end
     end
 end
