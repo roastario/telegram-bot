@@ -10,7 +10,7 @@ function appendSender(msg)
     local firstName = string.lower(msg.from.first_name == nil and 'NIL' or msg.from.first_name)
     local lastName = string.lower(msg.from.last_name == nil and 'NIL' or msg.from.last_name)
 
-    if (string.find(firstName, "davidson") or string.find(lastName, "davidson")) then
+    if (string.find(firstName, "franz") or string.find(lastName, "franz")) then
         return "!BD " .. msg.text
     else
         return msg.text
@@ -23,7 +23,7 @@ function run(msg, matches)
 end
 
 return {
-    description = "A Plugin to handle Ben Chatting Shit",
+    description = "Ben BullShit Handler",
     usage = "!BD [text]",
     patterns = {"^!BD (.*)$"},
     run = run,
