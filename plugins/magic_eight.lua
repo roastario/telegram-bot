@@ -36,6 +36,6 @@ end
 return {
     description = "Magic EightBall",
     usage = "!8ball",
-    patterns = {"^!8ball(.*)\?$"},
+    patterns = {"^!8ball(.*)\\?$"},
     run = run
 }
