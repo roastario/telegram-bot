@@ -79,7 +79,6 @@ function do_action(msg)
           else 
             result = desc.run(msg, matches)
             if (result) then
-              result = do_lex(msg, result)
               _send_msg(receiver, result)
             end
           end
