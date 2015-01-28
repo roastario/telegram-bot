@@ -36,7 +36,7 @@ end
 function msg_valid(msg)
   -- Dont process outgoing messages
   if msg.out then
-    return false
+    return msg.id == our_id
   end
   if msg.date < now then
     return false
