@@ -11,6 +11,7 @@ function on_msg_receive (msg)
   vardump(msg)
 
   if msg_valid(msg) == false then
+    print ("Message: " .. msg.text .. " was ignored ")
     return
   end
 
