@@ -8,7 +8,7 @@
 
 function appendSender(msg)
     local firstName = string.lower(msg.from.first_name == nil and 'NIL' or msg.from.first_name)
-    local lastName = string.lower(msg.from.last_name)
+    local lastName = string.lower(msg.from.last_name == nil and 'NIL' or msg.from.last_name)
 
     if (string.find(firstName, "davidson") or string.find(lastName, "davidson")) then
         return "!BD " .. msg.text
@@ -23,7 +23,7 @@ function run(msg, matches)
 end
 
 return {
-    description = "search image with Google API and sends it",
+    description = "A Plugin to handle Ben Chatting Shit",
     usage = "!BD [text]",
     patterns = {"^!BD (.*)$"},
     run = run,
