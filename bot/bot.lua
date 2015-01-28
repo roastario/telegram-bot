@@ -46,19 +46,6 @@ function msg_valid(msg)
   end
 end
 
-function do_lex(msg, text)
-  for name, desc in pairs(plugins) do
-    if (desc.lex ~= nil) then
-      result = desc.lex(msg, text)
-      if (result ~= nil) then
-        print ("Mutating to " .. result)
-        text = result
-      end
-    end
-  end
-  return text
-end
-
 -- Where magic happens
 function do_action(msg)
   local receiver = get_receiver(msg)
@@ -69,12 +56,16 @@ function do_action(msg)
      text = '['..msg.media.type..']'
   end
 
-  msg.text = do_lex(msg, text)
-
   for name, desc in pairs(plugins) do
-    -- print("Trying module", name)
+
+    -- Use the lex function in each plugin to transform the text in a way which it can process
+    if (desc.lex ~= nil) then
+        local newText = desc.lex(msg)
+        print ("Plugin: " .. desc.description .. " has modified messageText from: " .. text .. " -> " .. newText)
+        text = newText
+    end
+
     for k, pattern in pairs(desc.patterns) do
-      -- print("Trying", text, "against", pattern)
       matches = { string.match(text, pattern) }
       if matches[1] then
         mark_read(get_receiver(msg), ok_cb, false)
@@ -86,7 +77,6 @@ function do_action(msg)
             send_msg(receiver, text, ok_cb, false)
           else 
             result = desc.run(msg, matches)
-            -- print("  sending", result)
             if (result) then
               result = do_lex(msg, result)
               _send_msg(receiver, result)
