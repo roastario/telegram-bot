@@ -34,14 +34,14 @@ end
 
 function msg_valid(msg)
     -- Dont process outgoing messages
-    if msg.out then
-        return msg.from.id == our_id
-    end
     if msg.date < now then
         return false
     end
     if msg.unread == 0 then
         return false
+    end
+    if msg.out then
+        return msg.from.id == our_id
     end
 end
 
