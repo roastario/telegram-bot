@@ -15,13 +15,18 @@ function search(text)
     local b = http.request("http://api.giphy.com/v1/gifs/search?q=" .. text .. "&api_key=" .. api_key)
     local images = json:decode(b).data
     math.randomseed(os.time())
-    vardump(images)
-    print (b)
     if (#images == 0) then
+        print("NO Images Found for term: " + text)
         return nil
-end
+    end
+
     local i = math.random(0, #images)
-    return images[i].images.downsized.url
+    local image = images[i]
+
+    if (image.images.original.mp4) then
+        return image.images.original.mp4
+    else return images[i].images.downsized.url
+    end
 end
 
 function run(msg, matches)
