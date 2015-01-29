@@ -34,7 +34,7 @@ function search(text)
     local images = json:decode(b).data
     math.randomseed(os.time())
     if (#images == 0) then
-        print("NO Images Found for term: " + text)
+        print("NO Images Found for term: " .. text)
         return nil
     end
 
