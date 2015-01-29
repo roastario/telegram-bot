@@ -25,26 +25,23 @@ function search(text)
 
     if (image.images.original.mp4) then
         return image.images.original.mp4
-    else return images[i].images.downsized.url
+    else
+        return images[i].images.downsized.url
     end
 end
 
 function run(msg, matches)
     -- If no search data, a cat gif will be sended
     -- Because everyone loves pussies
-    local gif_url
     if matches[1] == "!gif" or matches[1] == "!giphy" then
-        gif_url = get_random_top()
+        local gif_url = get_random_top()
+        local file = download_to_file(gif_url)
+        send_document(get_receiver(msg), file, ok_cb, false)
     else
-        gif_url = search(url_encode(matches[1]))
+        local gif_url = search(url_encode(matches[1]))
+        local file = download_to_file(gif_url)
+        send_document(get_receiver(msg), file, ok_cb, false)
     end
-
-    if (gif_url ~= nil) then
-        return
-    end
-
-    local file = download_to_file(gif_url)
-    send_document(get_receiver(msg), file, ok_cb, false)
 end
 
 return {
