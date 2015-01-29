@@ -20,7 +20,7 @@ function search(text)
         return nil
     end
 
-    local i = math.random(0, #images-1)
+    local i = math.random(0, #images - 1)
     local image = images[i]
 
     if (image.images.original.mp4) then
@@ -40,7 +40,12 @@ function run(msg, matches)
     else
         local gif_url = search(url_encode(matches[1]))
         local file = download_to_file(gif_url)
-        send_document(get_receiver(msg), file, ok_cb, false)
+
+        if (string.ends(gif_url, "mp4")) then
+            send_video(get_receiver(msg), file, ok_cb, false)
+        else
+            send_document(get_receiver(msg), file, ok_cb, false)
+        end
     end
 end
 
