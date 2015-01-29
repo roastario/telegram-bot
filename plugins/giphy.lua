@@ -30,9 +30,13 @@ function search(text)
     end
 end
 
-function run(msg, matches)
+function run(args)
     -- If no search data, a cat gif will be sended
     -- Because everyone loves pussies
+
+    local matches = args.matches
+    local msg = args.msg
+
     if matches[1] == "!gif" or matches[1] == "!giphy" then
         local gif_url = get_random_top()
         local file = download_to_file(gif_url)
@@ -47,6 +51,13 @@ function run(msg, matches)
             send_document(get_receiver(msg), file, ok_cb, false)
         end
     end
+end
+
+function postponed_run(msg, matches)
+    local args = {}
+    args['msg'] = msg
+    args['matches'] = matches
+    postpone(run, args, 0.1)
 end
 
 return {
