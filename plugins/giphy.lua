@@ -13,7 +13,7 @@ end
 
 function get_image(images)
 
-    local idx = math.random(0, table.getn(images))
+    local idx = math.random(0, #images)
     local attempts = 0;
 
     while (attempts < #images) do
