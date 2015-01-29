@@ -20,7 +20,7 @@ function search(text)
         return nil
     end
 
-    local i = math.random(0, #images)
+    local i = math.random(0, #images-1)
     local image = images[i]
 
     if (image.images.original.mp4) then
