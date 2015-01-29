@@ -10,6 +10,24 @@ function get_random_top()
     return images[i].images.downsized.url
 end
 
+
+function get_image(images)
+
+    local idx = math.random(0, table.getn(images))
+    local attempts = 0;
+
+    while (attempts < #images) do
+        local image = images[idx]
+        if (image ~= nil) then
+            return image
+        end
+        idx = (idx + 1) % #images
+        attempts = attempts + 1
+    end
+
+    return nil
+end
+
 function search(text)
     local api_key = "dc6zaTOxFJmzC" -- public beta key
     local b = http.request("http://api.giphy.com/v1/gifs/search?q=" .. text .. "&api_key=" .. api_key)
@@ -20,8 +38,12 @@ function search(text)
         return nil
     end
 
-    local i = math.random(0, #images - 1)
-    local image = images[i]
+    local image = get_image(images)
+
+    if (image == nil) then
+        print("something went wrong")
+    end
+
 
     if (image.images.original.mp4) then
         return image.images.original.mp4
