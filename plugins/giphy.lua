@@ -72,5 +72,5 @@ return {
         "^!giphy (.*)",
         "^!giphy$"
     },
-    run = run
+    run = postponed_run
 }
