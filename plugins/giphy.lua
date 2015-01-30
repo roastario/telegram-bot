@@ -48,7 +48,7 @@ function search(text)
     if (image.images.original.mp4) then
         return image.images.original.mp4
     else
-        return images[i].images.downsized.url
+        return image.images.downsized.url
     end
 end
 
