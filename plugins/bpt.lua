@@ -18,7 +18,7 @@ function is_image(child_data)
 
     if (child_data.url ~= nil) then
         local local_case_url = string.lower(child_data.url)
-        for format_idx = 0, #valid_image_formats, 1 do
+        for format_idx = 0, #valid_image_formats-1, 1 do
             local format = valid_image_formats[format_idx]
             if (string.ends(local_case_url, format)) then
                 return IS_IMAGE_WITH_EXTENSION
