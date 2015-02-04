@@ -72,7 +72,7 @@ function run(args)
 
 
     local api_url = "http://www.reddit.com/r/BlackPeopleTwitter/search.json?restrict_sr=true&sort=top&t=all&q="
-    local response = http.request(api_url .. matches[1])
+    local response = http.request(api_url .. string.url_encode(matches[1]))
 
     local images = json:decode(response).data.children
     local image_url, title = get_image_url(images)
