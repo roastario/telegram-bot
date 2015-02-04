@@ -70,7 +70,7 @@ function run(args)
         if (string.ends(gif_url, "mp4")) then
             send_video(get_receiver(msg), file, ok_cb, false)
         else
-            send_video(get_receiver(msg), file, ok_cb, false)
+            send_photo(get_receiver(msg), file, ok_cb, false)
         end
     end
 end
