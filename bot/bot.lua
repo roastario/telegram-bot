@@ -65,7 +65,7 @@ function do_action(msg)
         end
 
         for k, pattern in pairs(desc.patterns) do
-            matches = { string.match(text, pattern) }
+            local matches = { string.match(text, pattern) }
             if matches[1] then
                 mark_read(get_receiver(msg), ok_cb, false)
                 print("  matches", pattern)
@@ -75,7 +75,7 @@ function do_action(msg)
                         local text = 'This plugin requires privileged user'
                         send_msg(receiver, text, ok_cb, false)
                     else
-                        result = desc.run(msg, matches)
+                        local result = desc.run(msg, matches)
                         if (result) then
                             _send_msg(receiver, result)
                         end
