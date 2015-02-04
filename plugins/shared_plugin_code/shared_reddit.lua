@@ -56,6 +56,11 @@ return function(subreddit, patterns)
 
     local function send_found_image(cb_extra, success, result)
         if success then
+
+            if (cb_extra[3] and string.ends(string.lower(cb_extra[3]), "gif")) then
+                send_document(cb_extra[1], cb_extra[2], ok_cb, false)
+            end
+
             send_photo(cb_extra[1], cb_extra[2], ok_cb, false)
         end
     end
@@ -81,16 +86,15 @@ return function(subreddit, patterns)
         local msg = args['msg']
         local receiver = get_receiver(msg)
 
-        local image_url, title;
+        local image_url, title, file_path
         if (matches[1] == "!bpt") then
-            print("DOING TRENDING")
             image_url, title = do_trending();
-            local file_path = download_to_file(image_url)
-            send_msg(receiver, title, send_found_image, { receiver, file_path })
+            file_path = download_to_file(image_url)
+            send_msg(receiver, title, send_found_image, { receiver, file_path, image_url })
         else
             image_url, title = do_search(matches[1])
             local file_path = download_to_file(image_url)
-            send_msg(receiver, title, send_found_image, { receiver, file_path })
+            send_msg(receiver, title, send_found_image, { receiver, file_path, image_url })
         end
     end
 
