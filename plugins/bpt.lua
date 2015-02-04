@@ -6,23 +6,17 @@
 -- To change this template use File | Settings | File Templates.
 --
 
-local api_url = "http://www.reddit.com/r/BlackPeopleTwitter/search.json?restrict_sr=true&sort=top&t=week&q="
-local valid_image_formats = { 'gif', 'jpg', 'jpeg', 'png' }
 
 local IS_IMAGE_WITH_EXTENSION = 0;
 local IS_IMAGE_WITHOUT_EXTENSION = 1;
 local IS_NOT_IMAGE = 2;
 
 function is_image(child_data)
-
-
+    local valid_image_formats = { 'gif', 'jpg', 'jpeg', 'png' }
     if (child_data.url ~= nil) then
         local local_case_url = string.lower(child_data.url)
-        for format_idx = 0, #valid_image_formats, 1 do
+        for format_idx = 1, #valid_image_formats, 1 do
             local format = valid_image_formats[format_idx]
-
-            print ("checking format: " .. format)
-
             if (string.ends(local_case_url, format)) then
                 return IS_IMAGE_WITH_EXTENSION
             end
@@ -42,7 +36,7 @@ end
 
 function get_image_url(children)
 
-    local idx = math.random(0, #children)
+    local idx = math.random(#children)
     local attempts = 0;
 
     while (attempts < #children) do
@@ -69,6 +63,7 @@ function get_image_url(children)
 end
 
 function run(args)
+    local api_url = "http://www.reddit.com/r/BlackPeopleTwitter/search.json?restrict_sr=true&sort=top&t=week&q="
     local msg = args['msg']
     local matches = args['matches']
     local response = http.request(api_url .. matches[1])
