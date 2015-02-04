@@ -67,7 +67,7 @@ function run(args)
     local images = json:decode(response).data.children
     local image_url = get_image_url(images)
     local file = download_to_file(image_url)
-    send_document(get_receiver(msg), file, ok_cb, false)
+    send_photo(get_receiver(msg), file, ok_cb, false)
 end
 
 function postponed_run(msg, matches)
