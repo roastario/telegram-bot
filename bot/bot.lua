@@ -178,7 +178,8 @@ function load_plugins()
     for k, v in pairs(_config.enabled_plugins) do
         print("Loading plugin", v)
         t = loadfile("plugins/" .. v .. '.lua')()
-        print ("Patterns loaded: " + vardump(t.patterns))
+        print ("Patterns loaded: ")
+        vardump(t.patterns)
         if (t ~= nil)
         then
             table.insert(plugins, t)
