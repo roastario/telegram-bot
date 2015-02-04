@@ -74,7 +74,7 @@ function do_search(term)
 end
 
 function do_trending()
-    local api_url = "http://www.reddit.com/r/BlackPeopleTwitter/search.json?restrict_sr=true&sort=hot"
+    local api_url = "http://www.reddit.com/r/BlackPeopleTwitter/hot.json"
     local response = http.request(api_url)
     local images = json:decode(response).data.children
     local image_url, title = get_image_url(images)
