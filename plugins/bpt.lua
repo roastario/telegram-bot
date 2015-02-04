@@ -65,17 +65,33 @@ function send_found_image(cb_extra, success, result)
     end
 end
 
+function do_search(term)
+    local api_url = "http://www.reddit.com/r/BlackPeopleTwitter/search.json?restrict_sr=true&sort=top&t=all&q="
+    local response = http.request(api_url .. string.url_encode(term))
+    local images = json:decode(response).data.children
+    local image_url, title = get_image_url(images)
+    return image_url, title
+end
+
+function do_trending()
+    local api_url = "http://www.reddit.com/r/BlackPeopleTwitter/search.json?restrict_sr=true&sort=hot"
+    local response = http.request(api_url)
+    local images = json:decode(response).data.children
+    local image_url, title = get_image_url(images)
+    return image_url, title
+end
+
 function run(args)
     local matches = args['matches']
     local msg = args['msg']
     local receiver = get_receiver(msg)
 
-
-    local api_url = "http://www.reddit.com/r/BlackPeopleTwitter/search.json?restrict_sr=true&sort=top&t=all&q="
-    local response = http.request(api_url .. string.url_encode(matches[1]))
-
-    local images = json:decode(response).data.children
-    local image_url, title = get_image_url(images)
+    local image_url,title;
+    if (matches[1] == "!bpt")then
+        image_url, title = do_trending();
+    else
+        image_url, title = do_search(matches[1])
+    end
     local file_path = download_to_file(image_url)
     send_msg(receiver, title, send_found_image, {receiver, file_path})
 end
@@ -95,6 +111,7 @@ return {
     },
     patterns = {
         "^!bpt (.*)",
+        "^!bpt$"
     },
     run = postponed_run
 }
