@@ -41,7 +41,7 @@ return function(subreddit, patterns)
                     else
                         local image_url = child.data.url
                         if (image_result > IS_IMAGE_WITH_EXTENSION) then
-                            image_url = image_url .. ".png"
+                            image_url = image_url .. ".gif"
                         end
                         return image_url, child.data.title
                     end
@@ -57,6 +57,7 @@ return function(subreddit, patterns)
     local function send_found_image(cb_extra, success, result)
         if success then
 
+            print (cb_extra[3])
             if (cb_extra[3] and string.ends(string.lower(cb_extra[3]), "gif")) then
                 send_document(cb_extra[1], cb_extra[2], ok_cb, false)
             end
