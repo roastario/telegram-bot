@@ -48,7 +48,7 @@ function get_image_url(children)
                     if (image_result > IS_IMAGE_WITH_EXTENSION) then
                         image_url = image_url .. ".png"
                     end
-                    return image_url
+                    return image_url, child.data.title
                 end
             end
         end
@@ -59,22 +59,33 @@ function get_image_url(children)
     return nil
 end
 
+function send_title(cb_extra, success, result)
+    if success then
+        send_msg(cb_extra[1], cb_extra[2], ok_cb, false)
+    end
+end
+
 function run(args)
-    local api_url = "http://www.reddit.com/r/BlackPeopleTwitter/search.json?restrict_sr=true&sort=top&t=week&q="
-    local msg = args['msg']
     local matches = args['matches']
+    local msg = args['msg']
+    local receiver = get_receiver(msg)
+
+
+    local api_url = "http://www.reddit.com/r/BlackPeopleTwitter/search.json?restrict_sr=true&sort=top&t=week&q="
     local response = http.request(api_url .. matches[1])
+
     local images = json:decode(response).data.children
-    local image_url = get_image_url(images)
-    local file = download_to_file(image_url)
-    send_photo(get_receiver(msg), file, ok_cb, false)
+    local image_url, title = get_image_url(images)
+    local file_path = download_to_file(image_url)
+    send_photo(receiver, file_path, send_title, {receiver, title})
+
 end
 
 function postponed_run(msg, matches)
     local args = {}
     args['msg'] = msg
     args['matches'] = matches
-    postpone(run, args, 0.1)
+    postpone(run, args, 0.01)
 end
 
 return {
