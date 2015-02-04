@@ -47,10 +47,13 @@ function get_image_url(children)
                 local image_result = is_image(child.data)
                 if (image_result > IS_IMAGE_WITHOUT_EXTENSION) then
                     --NOT IMAGE
+                    print (child.data.url .. "not image")
                 else
                     local image_url = child.data.url
+                    print ("image" .. child.data.url)
                     if (image_result > IS_IMAGE_WITH_EXTENSION) then
                         image_url = image_url .. ".png"
+
                         return image_url
                     end
                 end
