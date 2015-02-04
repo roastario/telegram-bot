@@ -59,9 +59,9 @@ function get_image_url(children)
     return nil
 end
 
-function send_title(cb_extra, success, result)
+function send_found_image(cb_extra, success, result)
     if success then
-        send_msg(cb_extra[1], cb_extra[2], ok_cb, false)
+        send_photo(cb_extra[1], cb_extra[2], ok_cb, false)
     end
 end
 
@@ -77,8 +77,7 @@ function run(args)
     local images = json:decode(response).data.children
     local image_url, title = get_image_url(images)
     local file_path = download_to_file(image_url)
-    send_photo(receiver, file_path, send_title, {receiver, title})
-
+    send_msg(receiver, title, send_found_image, {receiver, file_path})
 end
 
 function postponed_run(msg, matches)
