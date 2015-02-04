@@ -71,7 +71,7 @@ function run(args)
     local receiver = get_receiver(msg)
 
 
-    local api_url = "http://www.reddit.com/r/BlackPeopleTwitter/search.json?restrict_sr=true&sort=top&t=week&q="
+    local api_url = "http://www.reddit.com/r/BlackPeopleTwitter/search.json?restrict_sr=true&sort=top&t=all&q="
     local response = http.request(api_url .. matches[1])
 
     local images = json:decode(response).data.children
