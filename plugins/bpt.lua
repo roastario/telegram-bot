@@ -88,12 +88,16 @@ function run(args)
 
     local image_url,title;
     if (matches[1] == "!bpt")then
+        print ("DOING TRENDING")
         image_url, title = do_trending();
+        local file_path = download_to_file(image_url)
+        send_msg(receiver, title, send_found_image, {receiver, file_path})
     else
         image_url, title = do_search(matches[1])
+        local file_path = download_to_file(image_url)
+        send_msg(receiver, title, send_found_image, {receiver, file_path})
     end
-    local file_path = download_to_file(image_url)
-    send_msg(receiver, title, send_found_image, {receiver, file_path})
+
 end
 
 function postponed_run(msg, matches)
