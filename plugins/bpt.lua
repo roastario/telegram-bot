@@ -22,16 +22,12 @@ function is_image(child_data)
             end
         end
     end
-
     local domain = child_data.domain
     if (domain ~= nil) then
         if (domain == 'imgur.com') then
-            print (domain .. " was imgur")
             return IS_IMAGE_WITHOUT_EXTENSION
         end
     end
-
-    print (child_data.url .. " was not considered an image")
     return IS_NOT_IMAGE
 end
 
@@ -47,15 +43,12 @@ function get_image_url(children)
                 local image_result = is_image(child.data)
                 if (image_result > IS_IMAGE_WITHOUT_EXTENSION) then
                     --NOT IMAGE
-                    print (child.data.url .. "not image")
                 else
                     local image_url = child.data.url
-                    print ("image" .. child.data.url)
                     if (image_result > IS_IMAGE_WITH_EXTENSION) then
                         image_url = image_url .. ".png"
-
-                        return image_url
                     end
+                    return image_url
                 end
             end
         end
