@@ -26,11 +26,12 @@ function is_image(child_data)
     local domain = child_data.domain
     if (domain ~= nil) then
         if (domain == 'imgur.com') then
+            print (domain .. " was imgur")
             return IS_IMAGE_WITHOUT_EXTENSION
         end
     end
 
-
+    print (child_data.url .. " was not considered an image")
     return IS_NOT_IMAGE
 end
 
