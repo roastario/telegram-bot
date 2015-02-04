@@ -45,6 +45,7 @@ function get_image_url(children)
     while (attempts < #children) do
         local child = children[idx]
         if (child ~= nil) then
+            vardump(child)
             if (child.data ~= nil) then
                 local image_result = is_image(child.data)
                 if (image_result > IS_IMAGE_WITHOUT_EXTENSION) then
