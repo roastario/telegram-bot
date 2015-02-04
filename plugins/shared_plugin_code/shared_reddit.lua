@@ -57,12 +57,12 @@ return function(subreddit, patterns)
     local function send_found_image(cb_extra, success, result)
         if success then
 
-            print (cb_extra[3])
+            print(cb_extra[3])
             if (cb_extra[3] and string.ends(string.lower(cb_extra[3]), "gif")) then
                 send_document(cb_extra[1], cb_extra[2], ok_cb, false)
+            else
+                send_photo(cb_extra[1], cb_extra[2], ok_cb, false)
             end
-
-            send_photo(cb_extra[1], cb_extra[2], ok_cb, false)
         end
     end
 
