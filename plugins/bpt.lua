@@ -18,8 +18,11 @@ function is_image(child_data)
 
     if (child_data.url ~= nil) then
         local local_case_url = string.lower(child_data.url)
-        for format_idx = 0, #valid_image_formats-1, 1 do
+        for format_idx = 0, #valid_image_formats, 1 do
             local format = valid_image_formats[format_idx]
+
+            print ("checking format: " .. format)
+
             if (string.ends(local_case_url, format)) then
                 return IS_IMAGE_WITH_EXTENSION
             end
@@ -45,7 +48,6 @@ function get_image_url(children)
     while (attempts < #children) do
         local child = children[idx]
         if (child ~= nil) then
-            vardump(child)
             if (child.data ~= nil) then
                 local image_result = is_image(child.data)
                 if (image_result > IS_IMAGE_WITHOUT_EXTENSION) then
