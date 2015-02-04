@@ -1,4 +1,7 @@
-return function(subreddit, patterns, should_send_title)
+return function(subreddit, trending_pattern, search_pattern)
+
+    local captured_subreddit = subreddit;
+    local captured_patterns = {trending_pattern, search_pattern};
     local IS_IMAGE_WITH_EXTENSION = 0;
     local IS_IMAGE_WITHOUT_EXTENSION = 1;
     local IS_NOT_IMAGE = 2;
@@ -64,7 +67,7 @@ return function(subreddit, patterns, should_send_title)
     end
 
     local function do_search(term)
-        local api_url = "http://www.reddit.com/r/" .. string.url_encode(subreddit) .. "/search.json?restrict_sr=true&sort=top&t=all&q="
+        local api_url = "http://www.reddit.com/r/" .. string.url_encode(captured_subreddit) .. "/search.json?restrict_sr=true&sort=top&t=all&q="
         local response = http.request(api_url .. string.url_encode(term))
         local images = json:decode(response).data.children
         local image_url, title = get_image_url(images)
@@ -72,7 +75,7 @@ return function(subreddit, patterns, should_send_title)
     end
 
     local function do_trending()
-        local api_url = "http://www.reddit.com/r/" .. string.url_encode(subreddit) .. "/hot.json"
+        local api_url = "http://www.reddit.com/r/" .. string.url_encode(captured_subreddit) .. "/hot.json"
         local response = http.request(api_url)
         local images = json:decode(response).data.children
         local image_url, title = get_image_url(images)
@@ -85,39 +88,31 @@ return function(subreddit, patterns, should_send_title)
         local receiver = get_receiver(msg)
 
         local image_url, title, file_path
-        if (matches[1] == "!bpt") then
+        if (string.match(matches[1], trending_pattern)) then
             image_url, title = do_trending();
             file_path = download_to_file(image_url)
+            send_found_image( { receiver, file_path, image_url })
         else
             image_url, title = do_search(matches[1])
-            file_path = download_to_file(image_url)
+            local file_path = download_to_file(image_url)
+            send_found_image( { receiver, file_path, image_url })
         end
-
-
-        if (should_send_title) then
-            send_msg(receiver, title, send_found_image, { receiver, file_path, image_url })
-        else
-            send_found_image({ receiver, file_path, image_url })
-        end
-
-        local function postponed_run(msg, matches)
-            local args = {}
-            args['msg'] = msg
-            args['matches'] = matches
-            postpone(run, args, 0.01)
-        end
-
-        return {
-            description = subreddit .. " LOLS",
-            usage = {
-                "!sr <term>",
-                "!sr"
-            },
-            patterns = patterns,
-            run = postponed_run
-        }
     end
+
+    local function postponed_run(msg, matches)
+        local args = {}
+        args['msg'] = msg
+        args['matches'] = matches
+        postpone(run, args, 0.01)
+    end
+
+    return {
+        description = captured_subreddit .. " LOLS",
+        usage = {
+            "!sr <term>",
+            "!sr"
+        },
+        patterns = captured_patterns,
+        run = postponed_run
+    }
 end
-
-
-
