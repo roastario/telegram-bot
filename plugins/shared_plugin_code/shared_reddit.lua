@@ -1,6 +1,7 @@
 return function(subreddit, patterns)
 
-
+    local captured_subreddit = subreddit;
+    local captured_patterns = patterns;
     local IS_IMAGE_WITH_EXTENSION = 0;
     local IS_IMAGE_WITHOUT_EXTENSION = 1;
     local IS_NOT_IMAGE = 2;
@@ -60,7 +61,7 @@ return function(subreddit, patterns)
     end
 
     function do_search(term)
-        local api_url = "http://www.reddit.com/r/"..string.url_encode(subreddit).."/search.json?restrict_sr=true&sort=top&t=all&q="
+        local api_url = "http://www.reddit.com/r/"..string.url_encode(captured_subreddit).."/search.json?restrict_sr=true&sort=top&t=all&q="
         local response = http.request(api_url .. string.url_encode(term))
         local images = json:decode(response).data.children
         local image_url, title = get_image_url(images)
@@ -68,7 +69,7 @@ return function(subreddit, patterns)
     end
 
     function do_trending()
-        local api_url = "http://www.reddit.com/r/"..string.url_encode(subreddit).."/hot.json"
+        local api_url = "http://www.reddit.com/r/"..string.url_encode(captured_subreddit).."/hot.json"
         local response = http.request(api_url)
         local images = json:decode(response).data.children
         local image_url, title = get_image_url(images)
@@ -102,12 +103,12 @@ return function(subreddit, patterns)
     end
 
     return {
-        description = subreddit .. " LOLS",
+        description = captured_subreddit .. " LOLS",
         usage = {
             "!sr <term>",
             "!sr"
         },
-        patterns = patterns,
+        patterns = captured_patterns,
         run = postponed_run
     }
 
