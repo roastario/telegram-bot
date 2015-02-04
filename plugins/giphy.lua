@@ -28,7 +28,7 @@ function get_image(images)
     return nil
 end
 
-function search(text)
+function search(text, isMp4)
     local api_key = "dc6zaTOxFJmzC" -- public beta key
     local b = http.request("http://api.giphy.com/v1/gifs/search?q=" .. text .. "&api_key=" .. api_key)
     local images = json:decode(b).data
@@ -45,7 +45,7 @@ function search(text)
     end
 
 
-    if (image.images.original.mp4) then
+    if (image.images.original.mp4 and isMp4) then
         return image.images.original.mp4
     else
         return image.images.downsized.url
@@ -64,7 +64,7 @@ function run(args)
         local file = download_to_file(gif_url)
         send_document(get_receiver(msg), file, ok_cb, false)
     else
-        local gif_url = search(url_encode(matches[1]))
+        local gif_url = search(url_encode(matches[1]), string.starts(msg.text, "!mp4"))
         local file = download_to_file(gif_url)
 
         if (string.ends(gif_url, "mp4")) then
@@ -91,6 +91,7 @@ return {
     patterns = {
         "^!gif$",
         "^!gif (.*)",
+        "^!mp4 (.*)",
         "^!giphy (.*)",
         "^!giphy$"
     },

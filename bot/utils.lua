@@ -201,3 +201,7 @@ end
 function string.ends(String,End)
     return End=='' or string.sub(String,-string.len(End))==End
 end
+
+function string.starts(String, Start)
+    return Start == '' or string.sub(String, 0, string.len(Start)) == Start
+end
