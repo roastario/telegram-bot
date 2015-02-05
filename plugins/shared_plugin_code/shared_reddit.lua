@@ -90,8 +90,8 @@ return function(subreddit, trending_pattern, search_pattern)
         end
 
         if (image_url == nil) then
-            print ("Term: " .. matches[1] .. 'not found')
-            send_found_image({ receiver, 'plugins/shared_plugins/not_found.jpg', 'www.not.com/file.jpg'}, true)
+            print ("Term: " .. matches[1] .. ' not found')
+            send_found_image({ receiver, '/home/stefano/telegram-bot/plugins/shared_plugins/not_found.jpg', 'www.not.com/file.jpg'}, true)
         else
             file_path = download_to_file(image_url)
             send_found_image({ receiver, file_path, image_url }, true)
