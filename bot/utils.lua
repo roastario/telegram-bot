@@ -40,20 +40,24 @@ function download_to_file(url, noremove)
     local respbody = {}
     local one, c, h = http.request { url = url, sink = ltn12.sink.table(respbody), redirect = true }
     local htype = h["content-type"]
-    vardump(c)
     print("content-type: " .. htype)
 
     local file_name
     local file_path
+    local randomName = string.random(5)
+    local isPng = false;
     if htype == "image/jpeg" then
-        file_name = string.random(5) .. ".jpg"
+        file_name = randomName .. ".jpg"
         file_path = "/tmp/" .. file_name
+        isPng = false
     elseif htype == "image/gif" then
-        file_name = string.random(5) .. ".gif"
+        file_name = randomName .. ".gif"
         file_path = "/tmp/" .. file_name
+        isPng = false
     elseif htype == "image/png" then
-        file_name = string.random(5) .. ".png"
+        file_name = randomName .. ".png"
         file_path = "/tmp/" .. file_name
+        isPng = true
     else
         file_name = url:match("([^/]+)$")
         file_path = "/tmp/" .. file_name
@@ -62,12 +66,21 @@ function download_to_file(url, noremove)
     file:write(table.concat(respbody))
     file:close()
 
-    if noremove == nil then
+    if isPng then
+        local converted_path = '/tmp/' .. randomName .. '-t' .. '.jpg'
+        os.execute('convert ' .. file_path .. ' ' .. converted_path)
         print(file_path .. "will be removed in 20 seconds")
         postpone(rmtmp_cb, file_path, 20)
+        print(converted_path .. "will be removed in 20 seconds")
+        postpone(rmtmp_cb, converted_path, 20)
+        return converted_path
+    else
+        if noremove == nil then
+            print(file_path .. "will be removed in 20 seconds")
+            postpone(rmtmp_cb, file_path, 20)
+        end
+        return file_path
     end
-
-    return file_path
 end
 
 -- Callback to remove a file
@@ -198,8 +211,8 @@ function string.url_encode(str)
     return str
 end
 
-function string.ends(String,End)
-    return End=='' or string.sub(String,-string.len(End))==End
+function string.ends(String, End)
+    return End == '' or string.sub(String, -string.len(End)) == End
 end
 
 function string.starts(String, Start)

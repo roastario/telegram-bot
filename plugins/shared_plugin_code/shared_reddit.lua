@@ -17,12 +17,6 @@ return function(subreddit, trending_pattern, search_pattern)
                 end
             end
         end
-        local domain = child_data.domain
-        if (domain ~= nil) then
-            if (domain == 'imgur.com') then
-                return IS_IMAGE_WITHOUT_EXTENSION
-            end
-        end
         return IS_NOT_IMAGE
     end
 
@@ -95,7 +89,7 @@ return function(subreddit, trending_pattern, search_pattern)
         else
             image_url, title = do_search(matches[1])
             local file_path = download_to_file(image_url)
-            send_found_image( { receiver, file_path, image_url }, true)
+            send_found_image({ receiver, file_path, image_url }, true)
         end
     end
 
