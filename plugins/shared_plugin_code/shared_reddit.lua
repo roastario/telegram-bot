@@ -22,6 +22,11 @@ return function(subreddit, trending_pattern, search_pattern)
 
     local function get_image_url(children)
 
+
+        if (#children == 0) then
+            return nil
+        end
+
         local idx = math.random(#children)
         local attempts = 0;
 
