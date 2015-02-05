@@ -84,13 +84,18 @@ return function(subreddit, trending_pattern, search_pattern)
         local image_url, title, file_path
         if (string.match(matches[1], trending_pattern)) then
             image_url, title = do_trending();
-            file_path = download_to_file(image_url)
-            send_found_image({ receiver, file_path, image_url }, true)
+
         else
             image_url, title = do_search(matches[1])
-            local file_path = download_to_file(image_url)
+        end
+
+        if (image_url == nil) then
+            send_photo(receiver, 'plugins/shared_plugins/not_found.jpg', ok_cb, false)
+        else
+            file_path = download_to_file(image_url)
             send_found_image({ receiver, file_path, image_url }, true)
         end
+
     end
 
     local function postponed_run(msg, matches)
