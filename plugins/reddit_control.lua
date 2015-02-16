@@ -31,7 +31,7 @@ local function run(msg, matches)
     local chat_id = tostring(msg.to.id)
     local enabled = string.starts("1", matches[2]);
     local enabled_state = read_enabled_file()
-    local controlling_user = tostring(msg.from.id)
+    local controlling_user = get_name(msg)
     update_enabled_file(enabled_state, chat_id, subreddit, enabled);
     local text;
     if (enabled) then
