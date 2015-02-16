@@ -96,16 +96,16 @@ return function(subreddit, trending_pattern, search_pattern)
     end
 
     local function isEnabled(chat)
-
         local enabled_file = read_enabled_file()
         local chat_table = enabled_file[chat];
-        if (chat_table ~= nil) then
+        if (chat_table == nil) then
             return true
         end
         if (chat_table[captured_subreddit] ~= nil) then
-            return chat_table[captured_subreddit]
+            return chat_table[captured_subreddit] == true
         end
         return true
+
     end
 
     local function run(args)
