@@ -47,5 +47,6 @@ return {
     description = "Reddit Control",
     usage = "!rc subreddit enable/disable",
     patterns = { "^!rc ([%a_]+) (.+)$" },
+    privileged = true,
     run = run
 }
