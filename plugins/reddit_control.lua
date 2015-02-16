@@ -21,7 +21,7 @@ local function update_enabled_file(enabled_state, chat, subreddit, enabled)
     if (enabled_state[chat] == nil) then
         enabled_state[chat] = {}
     end
-    enabled_state[chat] = enabled;
+    enabled_state[chat][subreddit] = enabled;
     serialize_to_file(enabled_state, enabled_file)
 end
 
@@ -39,7 +39,7 @@ local function run(msg, matches)
     else
         text = "BOOOOOO " .. controlling_user .. " HAS DISABLED " .. subreddit;
     end
-    send_msg(receiver, text, ok_cb, false)
+    send_msg(msg.to.id, text, ok_cb, false)
 end
 
 return {
