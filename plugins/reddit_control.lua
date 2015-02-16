@@ -39,7 +39,8 @@ local function run(msg, matches)
     else
         text = "BOOOOOO " .. controlling_user .. " HAS DISABLED " .. subreddit;
     end
-    send_msg(msg.to.id, text, ok_cb, false)
+    return text
+
 end
 
 return {
