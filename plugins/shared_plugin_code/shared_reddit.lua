@@ -1,10 +1,12 @@
 return function(subreddit, trending_pattern, search_pattern)
 
     local captured_subreddit = subreddit;
-    local captured_patterns = {trending_pattern, search_pattern};
+    local captured_patterns = { trending_pattern, search_pattern };
     local IS_IMAGE_WITH_EXTENSION = 0;
     local IS_IMAGE_WITHOUT_EXTENSION = 1;
     local IS_NOT_IMAGE = 2;
+
+    local enabled_file = './data/subreddit_control.lua'
 
     local function is_image(child_data)
         local valid_image_formats = { 'gif', 'jpg', 'jpeg', 'png' }
@@ -21,8 +23,6 @@ return function(subreddit, trending_pattern, search_pattern)
     end
 
     local function get_image_url(children)
-
-
         if (#children == 0) then
             return nil
         end
@@ -81,6 +81,33 @@ return function(subreddit, trending_pattern, search_pattern)
         return image_url, title
     end
 
+    local function read_enabled_file()
+        local f = io.open(enabled_file, "r+")
+        -- If file doesn't exists
+        if f == nil then
+            -- Create a new empty table
+            print('Created new sub_reddit control file ' .. enabled_file)
+            serialize_to_file({}, enabled_file)
+        else
+            print('Sub reddit control file loaded: ' .. enabled_file)
+            f:close()
+        end
+        return loadfile(enabled_file)()
+    end
+
+    local function isEnabled(chat)
+
+        local enabled_file = read_enabled_file()
+        local chat_table = enabled_file[chat];
+        if (chat_table ~= nil) then
+            return true
+        end
+        if (chat_table[captured_subreddit] ~= nil) then
+            return false
+        end
+        return true
+    end
+
     local function run(args)
         local matches = args['matches']
         local msg = args['msg']
@@ -95,21 +122,28 @@ return function(subreddit, trending_pattern, search_pattern)
         end
 
         if (image_url == nil) then
-            print ("Term: " .. matches[1] .. ' not found')
-            send_found_image({ receiver, 'plugins/shared_plugin_code/not_found.jpg', 'www.not.com/file.jpg'}, true)
+            print("Term: " .. matches[1] .. ' not found')
+            send_found_image({ receiver, 'plugins/shared_plugin_code/not_found.jpg', 'www.not.com/file.jpg' }, true)
         else
             file_path = download_to_file(image_url)
             send_found_image({ receiver, file_path, image_url }, true)
         end
-
     end
 
     local function postponed_run(msg, matches)
         local args = {}
         args['msg'] = msg
         args['matches'] = matches
-        postpone(run, args, 0.01)
+
+        local chat_id = tostring(msg.to.id)
+
+        if (isEnabled(chat_id)) then
+            postpone(run, args, 0.01)
+        else
+        end
     end
+
+
 
     return {
         description = captured_subreddit .. " LOLS",
