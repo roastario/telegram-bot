@@ -103,7 +103,7 @@ return function(subreddit, trending_pattern, search_pattern)
             return true
         end
         if (chat_table[captured_subreddit] ~= nil) then
-            return false
+            return chat_table[captured_subreddit]
         end
         return true
     end
