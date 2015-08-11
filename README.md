@@ -68,7 +68,3 @@ $ sudo cp etc/telegram.conf /etc/init/
 $ sudo start telegram # To start it
 $ sudo stop telegram # To stop it
 ```
-
-Contact me
-------------
-You can contact me [via Telegram](https://telegram.me/yago_perez) but if you have an issue please [open](https://github.com/yagop/telegram-bot/issues) one.
